@@ -1,0 +1,66 @@
+<?php
+  if(isset($_POST['url']))
+	{
+	$key=$_POST['url'];
+	$url = ($key);
+	$ch = curl_init();
+	curl_setopt($ch, CURLOPT_URL,$url);
+	curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);
+	curl_setopt($ch, CURLOPT_SSL_VERIFYPEER, false); 
+	curl_setopt($ch, CURLOPT_SSL_VERIFYHOST, false);
+	$result = curl_exec($ch);
+	$result=json_decode($result);
+	//print_r($result->images->small);
+	//print_r(array($result)['max']);
+	//$result=$result[0];
+	}
+?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+<meta name="Keywords" content="{implode(',',$meta.keywords)}" />
+<meta name="Description" content="{implode(',',$meta.description)}" />
+<style type="text/css">
+body {margin:0; padding:0; font-size:12px; font-family:"微软雅黑",Arial, Helvetica, sans-serif; color:#000;}
+.content{ width:600px; height:200px; margin:30px auto;}
+.content1{ width:600px; margin:0 auto;}
+.ul { margin:0px; padding:0px; float:left;}
+.img1{ float:left; padding-right:20px;}
+.clear { clear:both;}
+.ul li {list-style:none;line-height:22px; height:22px;}
+input{ margin:0 auto;}
+.top{ margin: 20px;}
+</style>
+</head>
+<body>
+<div class="content">
+	<form method="post" action="1.php">
+		<input type="text" size="50" name="url" value="<?php if(isset($key)){ echo $key; }?>"/>　　
+		<input type="submit" value="提交" />
+	</form>
+</div>
+
+	<?php if(isset($result)):?>
+<div class="content1">
+		<div class="ceng1">
+			<div class="img1"><img src="<?php echo $result->images->medium;?>" /></div>
+			<ul class="ul">
+				<li><Span class="m">作者： <span class="f"><?php echo $result->author[0];?></span></li>
+				<li><Span class="m">出版社： <span class="f"><?php echo $result->publisher;?></span></li>
+				<li><Span class="m">出版年： <span class="f"><?php echo $result->pubdate;?></span></li>
+				<li><Span class="m">页数： <span class="f"><?php echo $result->pages;?></span></li>
+				<li><Span class="m">定价： <span class="f"><?php echo $result->price;?></span></li>
+				<li><Span class="m">装帧： <span class="f"><?php echo $result->binding;?></span></li>
+				<li><Span class="m">ISBN： <span class="f"><?php echo $result->isbn13;?></span></li>
+			</ul>
+			<div class="clear"></div>
+		</div>
+		<div class="top">内容简介</div>
+		<div class="ceng2">
+		　　<?php echo $result->summary;?>
+		</div>
+</div>
+	<?php endif;?>
+
+</body>
